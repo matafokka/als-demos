@@ -1,0 +1,1495 @@
+<!DOCTYPE html><html lang='en'><head>
+	<meta charset="UTF-8">
+	<title>ALS Examples</title>
+
+	<!-- ALS polyfills -->
+	<script src="leaflet-advanced-layer-system/dist/polyfills.js"></script>
+
+	<!-- ALS stylesheet -->
+	<link rel="stylesheet" href="styles.css">
+
+	<!-- Leaflet imports -->
+	<script src="leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+<div id="content">
+
+	<h1>Welcome</h1>
+	<p>...to the <a href="https://github.com/matafokka/leaflet-advanced-layer-system" class="link">ALS</a> demos website!</p>
+	<p>Here we have some short examples and various demos.</p>
+
+	<noscript>
+		<p>Please, enable JavaScript to see the demos.</p>
+	</noscript>
+
+	<h1>Example from the ALS docs</h1><div id="map1" class="map"></div><code class="demo" id="code-map1"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+</div><div><span class="hljs-comment">// In this example we'll demonstrate basic workflow with ALS. Example is a bit messy, so buckle up.</span>
+<span class="hljs-comment">// We have everything in one file for better understanding. Please, don't do like that, put each class in its own file.</span>
+
+<span class="hljs-built_in">require</span>(<span class="hljs-string">"leaflet-advanced-layer-system"</span>); <span class="hljs-comment">// Import ALS before doing anything. It should be imported only once.</span>
+
+<span class="hljs-comment">/////////////////////</span>
+<span class="hljs-comment">//     Locales     //</span>
+<span class="hljs-comment">/////////////////////</span>
+
+<span class="hljs-comment">// The first thing we have to do is to set up locales.</span>
+<span class="hljs-comment">// Each locale contains so-called locale properties - strings that will be displayed on the page.</span>
+<span class="hljs-comment">// When we'll try to set text to some kind of element, we'll use locale properties to localize our app.</span>
+
+<span class="hljs-comment">// English locale is added by default. Others should be added like this:</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-property">AdditionalLocales</span>.<span class="hljs-title class_">Russian</span>(); <span class="hljs-comment">// Add additional locales BEFORE defining your custom properties!</span>
+
+<span class="hljs-comment">// Locales not included in ALS can be defined in a following manner (we won't add this "locale" to our project though):</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-property">AdditionalLocales</span>.<span class="hljs-property">MyLocale</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+	L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>[<span class="hljs-string">"My Locale Name"</span>] = {
+		<span class="hljs-comment">// This stuff is needed for locale detection</span>
+		<span class="hljs-attr">language</span>: <span class="hljs-string">"Two letters language code"</span>,
+		<span class="hljs-attr">region</span>: <span class="hljs-string">"Two letters region code"</span>,
+
+		<span class="hljs-comment">// Then your locale properties go</span>
+		<span class="hljs-attr">myLocaleProperty</span>: <span class="hljs-string">"Property Value"</span>,
+	}
+}
+
+<span class="hljs-comment">// Define custom locale properties for English</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"English"</span>, {
+	<span class="hljs-attr">polygonSize</span>: <span class="hljs-string">"Polygon size:"</span>,
+	<span class="hljs-attr">uselessNumber</span>: <span class="hljs-string">"Useless number:"</span>,
+	<span class="hljs-attr">numberPlushPolygonSize</span>: <span class="hljs-string">"Number + polygon size ="</span>,
+	<span class="hljs-attr">calledBy</span>: <span class="hljs-string">"Called by widget"</span>,
+	<span class="hljs-attr">fillColor</span>: <span class="hljs-string">"Fill color:"</span>,
+	<span class="hljs-attr">strokeColor</span>: <span class="hljs-string">"Stroke color:"</span>,
+	<span class="hljs-attr">addCircle</span>: <span class="hljs-string">"Add Circle"</span>,
+	<span class="hljs-attr">thisIsPolygon</span>: <span class="hljs-string">"This is polygon!"</span>,
+	<span class="hljs-attr">rectLayer</span>: <span class="hljs-string">"Rectangle Layer"</span>,
+	<span class="hljs-attr">aboutText</span>: <span class="hljs-string">"Welcome to ALS demos!"</span>,
+	<span class="hljs-attr">demoLayer</span>: <span class="hljs-string">"Demo Layer"</span>,
+	<span class="hljs-attr">settingsTextInput</span>: <span class="hljs-string">"Text to display in the menu:"</span>
+});
+
+<span class="hljs-comment">// Define custom locale properties for Russian</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"Русский"</span>, {
+	<span class="hljs-attr">polygonSize</span>: <span class="hljs-string">"Размер полигона:"</span>,
+	<span class="hljs-attr">uselessNumber</span>: <span class="hljs-string">"Бесполезное число:"</span>,
+	<span class="hljs-attr">numberPlushPolygonSize</span>: <span class="hljs-string">"Число + размер полигона ="</span>,
+	<span class="hljs-attr">calledBy</span>: <span class="hljs-string">"Вызвано виджетом"</span>,
+	<span class="hljs-attr">fillColor</span>: <span class="hljs-string">"Цвет заливки:"</span>,
+	<span class="hljs-attr">strokeColor</span>: <span class="hljs-string">"Цвет обводки:"</span>,
+	<span class="hljs-attr">addCircle</span>: <span class="hljs-string">"Добавить Круг"</span>,
+	<span class="hljs-attr">thisIsPolygon</span>: <span class="hljs-string">"Это полигон!"</span>,
+	<span class="hljs-attr">rectLayer</span>: <span class="hljs-string">"Слой с прямоугольником"</span>,
+	<span class="hljs-attr">aboutText</span>: <span class="hljs-string">"Добро пожаловать на сайт демонстрации ALS!"</span>,
+	<span class="hljs-attr">demoLayer</span>: <span class="hljs-string">"Демонстрационный слой"</span>,
+	<span class="hljs-attr">settingsTextInput</span>: <span class="hljs-string">"Текст для отображения в меню:"</span>
+});
+
+<span class="hljs-comment">/////////////////////</span>
+<span class="hljs-comment">//   First layer   //</span>
+<span class="hljs-comment">/////////////////////</span>
+
+<span class="hljs-comment">// Create a wizard which you can see in a "New layer" window.</span>
+<span class="hljs-comment">// Widgets' values from the wizard will be passed to the layer's constructor.</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayerWizard</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-comment">// This text will be displayed in both wizard and settings windows</span>
+
+	<span class="hljs-comment">// Here we'll use locale properties for the first time. We can either pass text itself or a locale property.</span>
+	<span class="hljs-comment">// From now on if you'll see camelCaseStringLikeThis think about locale properties.</span>
+
+	<span class="hljs-attr">displayName</span>: <span class="hljs-string">"demoLayer"</span>,
+
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>); <span class="hljs-comment">// Call parent constructor</span>
+
+		<span class="hljs-comment">// Add a widget which will determine polygon's size to the wizard using addWidget().</span>
+		<span class="hljs-comment">// This will be the only one useful widget. The other widgets are for demonstration purposes.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(
+			<span class="hljs-comment">// The first constructor argument is always an ID. You can get any widget whenever you want by using its ID.</span>
+			<span class="hljs-comment">// The second argument almost always is a label text. We'll using a locale property instead.</span>
+			<span class="hljs-comment">// The last two arguments are for a callback. We don't pass a function itself, instead, we pass an object</span>
+			<span class="hljs-comment">// that contains a function and a function name. It's needed for a serialization.</span>
+
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Number</span>(<span class="hljs-string">"polygonSize"</span>, <span class="hljs-string">"polygonSize"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_demoCallback"</span>)
+				.<span class="hljs-title function_">setValue</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">setMin</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">setMax</span>(<span class="hljs-number">5</span>)
+			<span class="hljs-comment">// We can create and modify a widget in a chain. Each method (except for getters) returns the widget.</span>
+			<span class="hljs-comment">// Of course, you can assign it to the variable and use it later in your code.</span>
+		);
+
+		<span class="hljs-comment">// We can also add multiple widgets at once:</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidgets</span>(
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Number</span>(<span class="hljs-string">"myNumberId"</span>, <span class="hljs-string">"uselessNumber"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_demoCallback"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-number">0</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"myLabelId"</span>, <span class="hljs-string">""</span>).<span class="hljs-title function_">setTextAlign</span>(<span class="hljs-string">"center"</span>),
+		);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"myNumberId"</span>).<span class="hljs-title function_">callCallback</span>(); <span class="hljs-comment">// Call a callback to update the label</span>
+	},
+
+	<span class="hljs-comment">// Implement number widget's' callback. Callback accepts widget which called this callback.</span>
+	<span class="hljs-attr">_demoCallback</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">widget</span>) {
+		<span class="hljs-comment">// Get widgets values</span>
+		<span class="hljs-keyword">let</span> number = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"myNumberId"</span>).<span class="hljs-title function_">getValue</span>();
+		<span class="hljs-keyword">let</span> polygonSize = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"polygonSize"</span>).<span class="hljs-title function_">getValue</span>();
+
+		<span class="hljs-comment">// Let's display both of these values in a label</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"myLabelId"</span>)
+			<span class="hljs-comment">// L.ALS.locale contains all locale properties. Use it only when you want to display a string once.</span>
+			.<span class="hljs-title function_">setValue</span>(<span class="hljs-string">`<span class="hljs-subst">${L.ALS.locale.numberPlushPolygonSize}</span> <span class="hljs-subst">${number + polygonSize}</span>.
+			<span class="hljs-subst">${L.ALS.locale.calledBy}</span> <span class="hljs-subst">${widget.id}</span>.`</span>)
+			.<span class="hljs-title function_">setStyle</span>((polygonSize &gt; number) ? <span class="hljs-string">"success"</span> : <span class="hljs-string">"message"</span>); <span class="hljs-comment">// Set label style depending on our numbers</span>
+	},
+
+});
+
+<span class="hljs-comment">// Create settings for the layer. It'll contain custom polygon default colors.</span>
+<span class="hljs-comment">// Settings for each layer are displayed in the settings window under the item named after the layer (see below).</span>
+<span class="hljs-comment">// Settings also will be passed to the layer's constructor.</span>
+<span class="hljs-comment">// When settings will change, L.ALS.Layer.applyNewSettings() method will be called.</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayerSettings</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>); <span class="hljs-comment">// Call parent constructor</span>
+
+		<span class="hljs-comment">// Add default polygon fill and stroke colors.</span>
+		<span class="hljs-comment">// Note the second argument, it's default widget value, so user can set it if they've messed up the settings.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"fillColor"</span>, <span class="hljs-string">"fillColor"</span>), <span class="hljs-string">"#730000"</span>);
+
+		<span class="hljs-comment">// In settings, we can't use addWidgets() because of default values. So just call addWidget() multiple times.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"strokeColor"</span>, <span class="hljs-string">"strokeColor"</span>), <span class="hljs-string">"#730060"</span>);
+
+		<span class="hljs-comment">// This text will be displayed in the layer menu and updated whenever user updates settings.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Text</span>(<span class="hljs-string">"text"</span>, <span class="hljs-string">"settingsTextInput"</span>), <span class="hljs-string">"Bla-bla-bla"</span>);
+	}
+
+});
+
+<span class="hljs-comment">// Create layer itself</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayer</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-attr">defaultName</span>: <span class="hljs-string">"Polygon and Circles"</span>, <span class="hljs-comment">// Default layer name</span>
+
+	<span class="hljs-comment">// Note: we're overriding init() instead of initialize(). Do NOT override initialize()!</span>
+	<span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">wizardResults, settings</span>) {
+
+		<span class="hljs-comment">// If you need to copy settings to layer's properties, use copySettingsToThis().</span>
+		<span class="hljs-comment">// It won't change the original settings object, so you can use both.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">copySettingsToThis</span>(settings);
+
+		<span class="hljs-comment">// Build a menu for the layer.</span>
+		<span class="hljs-comment">// It'll contain polygon colors which default values will be from the settings.</span>
+		<span class="hljs-comment">// We'll assign widgets to the private fields for faster and easier access.</span>
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_fillColor</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"fill"</span>, <span class="hljs-string">"fillColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyPolygonColors"</span>)
+			.<span class="hljs-title function_">setValue</span>(settings.<span class="hljs-property">fillColor</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_strokeColor</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"stroke"</span>, <span class="hljs-string">"strokeColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyPolygonColors"</span>)
+			.<span class="hljs-title function_">setValue</span>(settings.<span class="hljs-property">strokeColor</span>);
+
+		<span class="hljs-comment">// This button will add circles.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_circleButton</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Button</span>(<span class="hljs-string">"button"</span>, <span class="hljs-string">"addCircle"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_addCircle"</span>);
+
+		<span class="hljs-comment">// Remember text input in the settings? This label will display it.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"label"</span>, <span class="hljs-string">""</span>);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidgets</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_fillColor</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_strokeColor</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_circleButton</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span>);
+
+		<span class="hljs-comment">// Add the polygon to the layer accounting the size from the wizard. Polygon will be resized by longitude.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span> = L.<span class="hljs-title function_">polygon</span>([
+			[<span class="hljs-number">73</span>, -<span class="hljs-number">6</span> * wizardResults.<span class="hljs-property">polygonSize</span>], [<span class="hljs-number">31</span>, -<span class="hljs-number">15</span> * wizardResults.<span class="hljs-property">polygonSize</span>],
+			[<span class="hljs-number">4</span>, <span class="hljs-number">42</span> * wizardResults.<span class="hljs-property">polygonSize</span>], [<span class="hljs-number">19</span>, <span class="hljs-number">87</span> * wizardResults.<span class="hljs-property">polygonSize</span>],
+			[<span class="hljs-number">69</span>, <span class="hljs-number">64</span> * wizardResults.<span class="hljs-property">polygonSize</span>], [<span class="hljs-number">62</span>, <span class="hljs-number">34</span> * wizardResults.<span class="hljs-property">polygonSize</span>],
+		]);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_circles</span> = []; <span class="hljs-comment">// Contains circles' geometries</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentCirclePos</span> = <span class="hljs-number">0</span>; <span class="hljs-comment">// Contains last circle's longitude</span>
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span>); <span class="hljs-comment">// Add polygon to the map. Use only L.ALS.Layer API for managing map objects!</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">applyNewSettings</span>(settings); <span class="hljs-comment">// Apply the settings</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_applyPolygonColors</span>(); <span class="hljs-comment">// Apply polygon colors</span>
+	},
+
+	<span class="hljs-comment">// Override method for applying new settings</span>
+	<span class="hljs-comment">// You'll not necessary need to apply settings every time they've changed.</span>
+	<span class="hljs-comment">// You may want to leave this method as it is, if your settings contain only initial parameters.</span>
+	<span class="hljs-comment">// Apply them at init() instead.</span>
+	<span class="hljs-attr">applyNewSettings</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">settings</span>) {
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span>.<span class="hljs-title function_">setValue</span>(settings.<span class="hljs-property">text</span>);
+	},
+
+	<span class="hljs-comment">// Callback for applying polygon colors</span>
+	<span class="hljs-attr">_applyPolygonColors</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span>.<span class="hljs-title function_">setStyle</span>({
+			<span class="hljs-attr">fillColor</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">_fillColor</span>.<span class="hljs-title function_">getValue</span>(),
+			<span class="hljs-attr">color</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">_strokeColor</span>.<span class="hljs-title function_">getValue</span>(),
+		});
+
+		<span class="hljs-comment">// Since we're gonna implement serialization, we might as well allow users to undo actions by writing them</span>
+		<span class="hljs-comment">// to the history</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">writeToHistory</span>();
+	},
+
+	<span class="hljs-comment">// This method is called whenever project is being exported. It should return a GeoJSON object.</span>
+	<span class="hljs-comment">// By default, it combines all layers on the map and returns them.</span>
+	<span class="hljs-comment">// You need to override this method when you want to export only specific layers.</span>
+	<span class="hljs-comment">// For our example, we'll return only polygon's geometry.</span>
+	<span class="hljs-attr">toGeoJSON</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span>.<span class="hljs-title function_">toGeoJSON</span>();
+	},
+
+	<span class="hljs-comment">// Now we'll look at serialization and deserialization.</span>
+	<span class="hljs-comment">// It allows users to save and load projects. Also used for undo and redo.</span>
+
+	<span class="hljs-comment">// This function only generates random size and calls a "worker" function that will actually add a circle</span>
+	<span class="hljs-comment">// We split code like that, so we'll be able to easily restore serialized circles. We'll dig into that later.</span>
+	<span class="hljs-attr">_addCircle</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-keyword">let</span> size = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">500000</span> + <span class="hljs-number">200000</span>;
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_circles</span>.<span class="hljs-title function_">push</span>(size); <span class="hljs-comment">// this._circles will be deserialized automatically</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_addCircleWorker</span>(size);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">writeToHistory</span>();
+	},
+
+	<span class="hljs-attr">_addCircleWorker</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">size</span>) {
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentCirclePos</span> += size / <span class="hljs-number">100000</span> + <span class="hljs-number">5</span>; <span class="hljs-comment">// Increase current position by object size and add some padding</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(
+			L.<span class="hljs-title function_">circle</span>([<span class="hljs-number">0</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentCirclePos</span>], {
+				<span class="hljs-attr">radius</span>: size,
+				<span class="hljs-attr">fillColor</span>: <span class="hljs-string">"blue"</span>,
+				<span class="hljs-attr">color</span>: <span class="hljs-string">"blue"</span>,
+			}));
+	},
+
+	<span class="hljs-comment">// The default algorithm is pretty smart and able to serialize almost everything except HTMLElements and some</span>
+	<span class="hljs-comment">// really messed up classes. It'll even skip classes extending L.Layer and L.Map for this reason.</span>
+	<span class="hljs-comment">// We have to serialize such classes manually.</span>
+
+	<span class="hljs-comment">// The key is to represent such objects as simple types and structures such as numbers, arrays or plain objects.</span>
+	<span class="hljs-comment">// For example, it can be an array of vertices or objects with geometry and custom properties.</span>
+
+	<span class="hljs-comment">// Sometimes you don't even have to do anything. In our case, polygon will be reconstructed at the init(), and</span>
+	<span class="hljs-comment">// we already have circles sizes in array.</span>
+
+	<span class="hljs-comment">// But if you have lots of objects which you can't put to ignore list, you might want to override serialization.</span>
+	<span class="hljs-comment">// Let's demonstrate how to do that despite having perfect setup.</span>
+
+	<span class="hljs-comment">// This method is called whenever serialization is required: when saving a project or when undo/redo is called.</span>
+	<span class="hljs-comment">// seenObjects is passed by ALS, you need to pass it to any serialization method.</span>
+	<span class="hljs-attr">serialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">seenObjects</span>) {
+		<span class="hljs-comment">// Call parent's method. It'll serialize stuff like layer name, layer widgets and much more.</span>
+		<span class="hljs-keyword">let</span> serialized = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getObjectToSerializeTo</span>(seenObjects);
+
+		<span class="hljs-keyword">let</span> serializedCircles = []; <span class="hljs-comment">// Store circles in here</span>
+
+		<span class="hljs-comment">// For each layer</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">eachLayer</span>(<span class="hljs-function">(<span class="hljs-params">layer</span>) =&gt;</span> {
+			<span class="hljs-keyword">if</span> (layer <span class="hljs-keyword">instanceof</span> L.<span class="hljs-property">Polygon</span>) <span class="hljs-comment">// We don't need polygons here</span>
+				<span class="hljs-keyword">return</span>;
+
+			<span class="hljs-comment">// Push a plain object to the array which will contain circle size and position</span>
+			serializedCircles.<span class="hljs-title function_">push</span>({
+				<span class="hljs-attr">size</span>: layer.<span class="hljs-title function_">getRadius</span>(),
+				<span class="hljs-attr">pos</span>: layer.<span class="hljs-title function_">getLatLng</span>(),
+			});
+		});
+
+		<span class="hljs-comment">// Add the circles to the serialized object. Properties added like that won't be deserialized automatically.</span>
+		serialized.<span class="hljs-property">serializedCircles</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Serializable</span>.<span class="hljs-title function_">serializeAnyObject</span>(serializedCircles, seenObjects);
+		<span class="hljs-keyword">return</span> serialized; <span class="hljs-comment">// Return serialized object</span>
+	},
+
+	<span class="hljs-attr">statics</span>: {
+		<span class="hljs-comment">// Assign wizard and settings to the layer</span>
+		<span class="hljs-attr">wizard</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayerWizard</span>, <span class="hljs-comment">// You should pass a class here</span>
+		<span class="hljs-attr">settings</span>: <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">MyLayerSettings</span>(), <span class="hljs-comment">// You should pass an instance here</span>
+
+		<span class="hljs-comment">// Now let's break down deserialization which should restore all original objects from the serialized object</span>
+
+		<span class="hljs-comment">// This method is called whenever deserialization is required: when loading a project or performing undo/redo.</span>
+		<span class="hljs-comment">// Whoa, lots of arguments! Fortunately, we only have to pass them.</span>
+		<span class="hljs-attr">deserialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">serialized, layerSystem, settings, seenObjects</span>) {
+			<span class="hljs-comment">// Call parent's method and get the deserialized object. It's an instance of this layer.</span>
+			<span class="hljs-keyword">let</span> deserialized = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">deserialize</span>(serialized, layerSystem, settings, seenObjects);
+
+			<span class="hljs-comment">// If we didn't go the hard way, we would do this:</span>
+			<span class="hljs-comment">// for (let size of deserialized._circles)</span>
+			<span class="hljs-comment">//     deserialized._addCircleWorker(size);</span>
+
+			<span class="hljs-comment">// Add circle layers. Manually added properties won't be deserialized automatically.</span>
+			<span class="hljs-comment">// We have to call L.ALS.Serializable.deserialize() on every custom property, even on primitives.</span>
+			<span class="hljs-keyword">let</span> circles = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Serializable</span>.<span class="hljs-title function_">deserialize</span>(serialized.<span class="hljs-property">serializedCircles</span>, seenObjects);
+			<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> circle <span class="hljs-keyword">of</span> circles) {
+				deserialized.<span class="hljs-title function_">addLayers</span>(
+					L.<span class="hljs-title function_">circle</span>(circle.<span class="hljs-property">pos</span>, {
+						<span class="hljs-attr">fillColor</span>: <span class="hljs-string">"blue"</span>,
+						<span class="hljs-attr">color</span>: <span class="hljs-string">"blue"</span>,
+						<span class="hljs-attr">radius</span>: circle.<span class="hljs-property">size</span>,
+					}));
+			}
+
+			<span class="hljs-comment">// Restore last position</span>
+			<span class="hljs-keyword">if</span> (circles.<span class="hljs-property">length</span> !== <span class="hljs-number">0</span>)
+				deserialized.<span class="hljs-property">_currentCirclePos</span> = circles[circles.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>].<span class="hljs-property">pos</span>.<span class="hljs-property">lng</span>;
+
+			deserialized.<span class="hljs-title function_">_applyPolygonColors</span>(); <span class="hljs-comment">// Widgets' values will be restored, but the callback won't be called</span>
+			<span class="hljs-keyword">return</span> deserialized; <span class="hljs-comment">// Return deserialized object</span>
+		}
+	},
+
+});
+
+<span class="hljs-comment">/////////////////////</span>
+<span class="hljs-comment">//  Second layer   //</span>
+<span class="hljs-comment">/////////////////////</span>
+
+<span class="hljs-comment">// This layer will demonstrate interactivity. It'll have a rectangle that will change its color on click.</span>
+<span class="hljs-comment">// It won't have serialization overrides because everything is represented by simple structures.</span>
+<span class="hljs-comment">// Even though we don't need wizard or settings for this layer, it's always good to create placeholders.</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addRectLabel</span> (widgetable) {
+	widgetable.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"id"</span>, <span class="hljs-string">"rectLayer"</span>).<span class="hljs-title function_">setStyle</span>(<span class="hljs-string">"message"</span>));
+}
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayerWizard</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">displayName</span>: <span class="hljs-string">"rectLayer"</span>,
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+		<span class="hljs-title function_">addRectLabel</span>(<span class="hljs-variable language_">this</span>);
+	}
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectSettings</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+		<span class="hljs-title function_">addRectLabel</span>(<span class="hljs-variable language_">this</span>);
+	}
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">defaultName</span>: <span class="hljs-string">"Interactive Rectangle"</span>,
+
+	<span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">init</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_colors</span> = [<span class="hljs-string">"red"</span>, <span class="hljs-string">"green"</span>, <span class="hljs-string">"blue"</span>];
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentColor</span> = <span class="hljs-number">0</span>;
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_rect</span> = L.<span class="hljs-title function_">rectangle</span>([[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">70</span>, <span class="hljs-number">50</span>]]);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_rect</span>);
+		<span class="hljs-title function_">addRectLabel</span>(<span class="hljs-variable language_">this</span>);
+
+		<span class="hljs-comment">// This method adds an event listener. Event listeners should be managed by L.ALS.Layer API, not by Leaflet!</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addEventListenerTo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_rect</span>, <span class="hljs-string">"click"</span>, <span class="hljs-string">"_changeColor"</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_changeColor</span>(); <span class="hljs-comment">// Set initial color</span>
+	},
+
+	<span class="hljs-attr">_changeColor</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-keyword">let</span> color = <span class="hljs-variable language_">this</span>.<span class="hljs-property">_colors</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentColor</span>];
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_rect</span>.<span class="hljs-title function_">setStyle</span>({
+			<span class="hljs-attr">fillColor</span>: color,
+			<span class="hljs-attr">color</span>: color,
+		});
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentColor</span> = (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentColor</span> === <span class="hljs-variable language_">this</span>.<span class="hljs-property">_colors</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) ? <span class="hljs-number">0</span> : <span class="hljs-variable language_">this</span>.<span class="hljs-property">_currentColor</span> + <span class="hljs-number">1</span>;
+	},
+
+	<span class="hljs-attr">statics</span>: {
+		<span class="hljs-attr">wizard</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayerWizard</span>,
+		<span class="hljs-attr">settings</span>: <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">RectSettings</span>(),
+	}
+});
+
+<span class="hljs-comment">/////////////////////</span>
+<span class="hljs-comment">//    App setup    //</span>
+<span class="hljs-comment">/////////////////////</span>
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>(); <span class="hljs-comment">// Initialize system. This method MUST be called after all Leaflet and ALS imports.</span>
+
+<span class="hljs-comment">// Create a Leaflet map</span>
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map1"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Improves performance</span>
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Set this option to false! Otherwise, there'll be problems with L.ALS.LeafletLayers.WidgetLayer!</span>
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// We'll add ALS control instead</span>
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">0</span>, <span class="hljs-number">3</span>], <span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// Create ALS instance and provide options which allows for customization</span>
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-comment">// Add text to the "About" section in the settings. Here we'll also demonstrate how to localize HTML elements.</span>
+	<span class="hljs-comment">// The first attribute specifies which locale property to use. Second attribute specifies property to localize.</span>
+	<span class="hljs-comment">// You don't need to specify the second attribute if you want to put text in the element.</span>
+	<span class="hljs-comment">// But you'll need it if you want to localize, for example, tooltips.</span>
+	<span class="hljs-attr">aboutHTML</span>: <span class="hljs-string">`&lt;h1 data-als-locale-property="aboutText" data-als-locale-property-to-localize="innerHTML"&gt;&lt;/h1&gt;`</span>,
+	<span class="hljs-attr">enableHistory</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">position</span>: <span class="hljs-string">"topright"</span>,
+}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map); <span class="hljs-comment">// Add ALS zoom control</span>
+
+<span class="hljs-comment">// Create and add a base layer. You can create and add multiple base layers.</span>
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);
+
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayer</span>); <span class="hljs-comment">// Register ALS layers</span>
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></code><h1>Same example but with toolbar enabled</h1><div id="map2" class="map"></div><code class="demo" id="code-map2"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</div><div>L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>();
+
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map2"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-comment">// We won't add zoom control because toolbar already has them. On mobile, zoom control will be added by ALS.</span>
+	<span class="hljs-comment">// This behavior can be customized by ALS options.</span>
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">0</span>, <span class="hljs-number">3</span>], <span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-attr">enableToolbar</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Setting this option to true will enable the toolbar</span>
+	<span class="hljs-attr">enableHistory</span>: <span class="hljs-literal">true</span>,
+}); <span class="hljs-comment">// Note: we don't call addTo() when we're using toolbar because we don't need another menu button</span>
+
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayer</span>);
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></code><h1>Using ALS as a menu without some of the buttons</h1><div id="map3" class="map"></div><code class="demo" id="code-map3"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+</div><div><span class="hljs-comment">// In this demo, we'll create an ALS instance with only one layer, without settings, undo/redo and projects.</span>
+<span class="hljs-comment">// However, we'll still localize it. Every ALS instance shares the same settings which also applies to the locale.</span>
+<span class="hljs-comment">// You can open settings through the previous example, change locale and see that this example changes too.</span>
+<span class="hljs-comment">// The layer in the demo will have a couple of shapes. Users can change shapes' colors.</span>
+
+<span class="hljs-comment">// Add locale properties</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"English"</span>, {
+	<span class="hljs-string">"singleLayer"</span>: <span class="hljs-string">"Single Layer"</span>,
+	<span class="hljs-string">"polygonColor"</span>: <span class="hljs-string">"Polygon color:"</span>,
+	<span class="hljs-string">"triangleColor"</span>: <span class="hljs-string">"Triangle color:"</span>,
+	<span class="hljs-string">"circleColor"</span>: <span class="hljs-string">"Circle color:"</span>,
+	<span class="hljs-string">"circleRadius"</span>: <span class="hljs-string">"Circle radius"</span>,
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"Русский"</span>, {
+	<span class="hljs-string">"singleLayer"</span>: <span class="hljs-string">"Одиночный Слой"</span>,
+	<span class="hljs-string">"polygonColor"</span>: <span class="hljs-string">"Цвет полигона:"</span>,
+	<span class="hljs-string">"triangleColor"</span>: <span class="hljs-string">"Цвет треугольника:"</span>,
+	<span class="hljs-string">"circleColor"</span>: <span class="hljs-string">"Цвет круга:"</span>,
+	<span class="hljs-string">"circleRadius"</span>: <span class="hljs-string">"Радиус круга:"</span>,
+});
+
+<span class="hljs-comment">// You don't have to extend default wizard and settings if you don't have settings anywhere.</span>
+<span class="hljs-comment">// We have settings, so we gotta override it.</span>
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayerWizard</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-title function_">extend</span>({ <span class="hljs-attr">displayName</span>: <span class="hljs-string">"singleLayer"</span> });
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayerSettings</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"id"</span>, <span class="hljs-string">"singleLayer"</span>), <span class="hljs-string">"singleLayer"</span>);
+	}
+})
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayer</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">init</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span> = L.<span class="hljs-title function_">polygon</span>([[<span class="hljs-number">51</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">51</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">51.5</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">52</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">52</span>, <span class="hljs-number">0</span>]]);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_triangle</span> = L.<span class="hljs-title function_">polygon</span>([[<span class="hljs-number">51</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">51</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">52</span>, <span class="hljs-number">3</span>]]);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_circle</span> = L.<span class="hljs-title function_">circle</span>([<span class="hljs-number">51.5</span>, <span class="hljs-number">4</span>], <span class="hljs-number">1</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_polygon</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_triangle</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_circle</span>);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_objectNames</span> = [<span class="hljs-string">"polygon"</span>, <span class="hljs-string">"triangle"</span>, <span class="hljs-string">"circle"</span>]; <span class="hljs-comment">// So we can iterate over widgets</span>
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidgets</span>(
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"polygonColor"</span>, <span class="hljs-string">"polygonColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyProperties"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"#fff300"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"triangleColor"</span>, <span class="hljs-string">"triangleColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyProperties"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"#ff8c00"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"circleColor"</span>, <span class="hljs-string">"circleColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyProperties"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"#ff0000"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Number</span>(<span class="hljs-string">"circleRadius"</span>, <span class="hljs-string">"circleRadius"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_applyProperties"</span>)
+				.<span class="hljs-title function_">setValue</span>(<span class="hljs-number">50000</span>).<span class="hljs-title function_">setMin</span>(<span class="hljs-number">50000</span>).<span class="hljs-title function_">setMax</span>(<span class="hljs-number">500000</span>).<span class="hljs-title function_">setStep</span>(<span class="hljs-number">10000</span>),
+		);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_applyProperties</span>();
+	},
+
+	<span class="hljs-comment">// We'll set all the stuff in one function to simplify things</span>
+	<span class="hljs-attr">_applyProperties</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-comment">// Set colors in one loop</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> name <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">_objectNames</span>) {
+			<span class="hljs-keyword">let</span> color = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(name + <span class="hljs-string">"Color"</span>).<span class="hljs-title function_">getValue</span>();
+			<span class="hljs-variable language_">this</span>[<span class="hljs-string">"_"</span> + name].<span class="hljs-title function_">setStyle</span>({
+				<span class="hljs-attr">color</span>: color,
+				<span class="hljs-attr">fillColor</span>: color,
+			});
+		}
+
+		<span class="hljs-comment">// Set circle radius</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_circle</span>.<span class="hljs-title function_">setRadius</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"circleRadius"</span>).<span class="hljs-title function_">getValue</span>());
+	},
+
+	<span class="hljs-attr">statics</span>: {
+		<span class="hljs-attr">wizard</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayerWizard</span>,
+		<span class="hljs-attr">settings</span>: <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">Settings</span>(),
+	}
+
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>();
+
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map3"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">51.5</span>, <span class="hljs-number">2</span>], <span class="hljs-number">7</span>);
+
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-comment">// Disable button we don't need: project-related and settings</span>
+	<span class="hljs-attr">enableProjects</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableSettings</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">position</span>: <span class="hljs-string">"topright"</span>,
+
+	<span class="hljs-comment">// Make ALS use only our single layer</span>
+	<span class="hljs-attr">useOnlyThisLayer</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayer</span>,
+}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>); <span class="hljs-comment">// Add your base layers to the system</span></div></code><h1>Previous demo without any buttons. As simple as ALS could get.</h1><div id="map4" class="map"></div><code class="demo" id="code-map4"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</div><div>L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>();
+
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map4"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">51.5</span>, <span class="hljs-number">2</span>], <span class="hljs-number">7</span>);
+
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-attr">enableProjects</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableExport</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableBaseLayerSwitching</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableSettings</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">useOnlyThisLayer</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">SingleLayer</span>,
+	<span class="hljs-attr">position</span>: <span class="hljs-string">"topright"</span>,
+}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1>Map widgets</h1><div id="map5" class="map"></div><code class="demo" id="code-map5"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+</div><div><span class="hljs-comment">// In this demo, we'll add widgets to the map and display their values in the layer menu</span>
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"English"</span>, {
+	<span class="hljs-string">"mapWidgetsLayer"</span>: <span class="hljs-string">"Map Widgets Layer"</span>,
+	<span class="hljs-string">"dummyNumber"</span>: <span class="hljs-string">"Dummy number"</span>,
+	<span class="hljs-string">"dummyText"</span>: <span class="hljs-string">"Dummy text"</span>,
+	<span class="hljs-string">"dummyColor"</span>: <span class="hljs-string">"Dummy color"</span>,
+	<span class="hljs-string">"dummyText2"</span>: <span class="hljs-string">"Dummy text 2"</span>,
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"Русский"</span>, {
+	<span class="hljs-string">"mapWidgetsLayer"</span>: <span class="hljs-string">"Слой с виджетами на карте"</span>,
+	<span class="hljs-string">"dummyNumber"</span>: <span class="hljs-string">"Число"</span>,
+	<span class="hljs-string">"dummyText"</span>: <span class="hljs-string">"Текст"</span>,
+	<span class="hljs-string">"dummyColor"</span>: <span class="hljs-string">"Цвет"</span>,
+	<span class="hljs-string">"dummyText2"</span>: <span class="hljs-string">"Текст 2"</span>,
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MapWidgetsWizard</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-title function_">extend</span>({<span class="hljs-attr">displayName</span>: <span class="hljs-string">"mapWidgetsLayer"</span>});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MapWidgetsSettings</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"id"</span>, <span class="hljs-string">"mapWidgetsLayer"</span>).<span class="hljs-title function_">setStyle</span>(<span class="hljs-string">"message"</span>), <span class="hljs-string">"mapWidgetsLayer"</span>);
+	}
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MapWidgetsLayer</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-comment">// Create a widgetable that will be added to the map and contain our widgets.</span>
+		<span class="hljs-comment">// First argument is a position.</span>
+		<span class="hljs-comment">// Second argument is an origin, i.e. which point of the widgetable will be at given position.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetable</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LeafletLayers</span>.<span class="hljs-title class_">WidgetLayer</span>([<span class="hljs-number">51</span>, <span class="hljs-number">0</span>], <span class="hljs-string">"center"</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetable</span>.<span class="hljs-title function_">addWidgets</span>(
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Number</span>(<span class="hljs-string">"number"</span>, <span class="hljs-string">"dummyNumber"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_updateMenu"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-number">0</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Text</span>(<span class="hljs-string">"text"</span>, <span class="hljs-string">"dummyText"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_updateMenu"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"Write something here..."</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Color</span>(<span class="hljs-string">"color"</span>, <span class="hljs-string">"dummyColor"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_updateMenu"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"#0088ff"</span>),
+		);
+
+		<span class="hljs-comment">// If there's only one widget, widgetable will remove any padding.</span>
+		<span class="hljs-comment">// By the way, all leaflet layers have aliases at L namespace.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetableWithOneWidget</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-title class_">WidgetLayer</span>([<span class="hljs-number">51</span>, <span class="hljs-number">4</span>], <span class="hljs-string">"topLeft"</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetableWithOneWidget</span>.<span class="hljs-title function_">addWidget</span>(
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Text</span>(<span class="hljs-string">"text"</span>, <span class="hljs-string">"dummyText2"</span>, <span class="hljs-variable language_">this</span>, <span class="hljs-string">"_updateMenu"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-string">"Whoa, only one widget!"</span>)
+		);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetable</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetableWithOneWidget</span>);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidgets</span>(
+			<span class="hljs-comment">// Value labels are good not only for formatting values, but for text with additional label</span>
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">ValueLabel</span>(<span class="hljs-string">"number"</span>, <span class="hljs-string">"dummyNumber"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">ValueLabel</span>(<span class="hljs-string">"text"</span>, <span class="hljs-string">"dummyText"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">ValueLabel</span>(<span class="hljs-string">"color"</span>, <span class="hljs-string">"dummyColor"</span>),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">Divider</span>(),
+			<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">ValueLabel</span>(<span class="hljs-string">"text2"</span>, <span class="hljs-string">"dummyText2"</span>),
+		);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_updateMenu</span>();
+	},
+
+	<span class="hljs-attr">_updateMenu</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-keyword">let</span> ids = [<span class="hljs-string">"number"</span>, <span class="hljs-string">"text"</span>, <span class="hljs-string">"color"</span>];
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> id <span class="hljs-keyword">of</span> ids)
+			<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(id).<span class="hljs-title function_">setValue</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetable</span>.<span class="hljs-title function_">getWidgetById</span>(id).<span class="hljs-title function_">getValue</span>());
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"text2"</span>).<span class="hljs-title function_">setValue</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_mapWidgetableWithOneWidget</span>.<span class="hljs-title function_">getWidgetById</span>(<span class="hljs-string">"text"</span>).<span class="hljs-title function_">getValue</span>());
+	},
+
+	<span class="hljs-attr">statics</span>: {
+		<span class="hljs-attr">wizard</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MapWidgetsWizard</span>,
+		<span class="hljs-attr">settings</span>: <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">MapWidgetsSettings</span>(),
+	}
+
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>();
+
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map5"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">51</span>, <span class="hljs-number">2</span>], <span class="hljs-number">7</span>);
+
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-attr">enableProjects</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableExport</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableBaseLayerSwitching</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableSettings</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">useOnlyThisLayer</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MapWidgetsLayer</span>,
+	<span class="hljs-attr">position</span>: <span class="hljs-string">"topright"</span>,
+}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1>Fast labels</h1><div id="map6" class="map"></div><code class="demo" id="code-map6"><div class="line-numbers">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+</div><div><span class="hljs-comment">// In this demo, we'll use cool ALS class which allows us to render lots of labels on the map.</span>
+<span class="hljs-comment">// We'll fill the map with labels with their positions.</span>
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"English"</span>, {
+	<span class="hljs-string">"labelsLayer"</span>: <span class="hljs-string">"Labels Layer"</span>,
+	<span class="hljs-string">"drawnLabels"</span>: <span class="hljs-string">"Number of drawn labels"</span>,
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Locales</span>.<span class="hljs-title function_">addLocaleProperties</span>(<span class="hljs-string">"Русский"</span>, {
+	<span class="hljs-string">"labelsLayer"</span>: <span class="hljs-string">"Слой с Надписями"</span>,
+	<span class="hljs-string">"drawnLabels"</span>: <span class="hljs-string">"Отрисовано надписей"</span>
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LabelsLayerWizard</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Wizard</span>.<span class="hljs-title function_">extend</span>({<span class="hljs-attr">displayName</span>: <span class="hljs-string">"labelsLayer"</span>});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LabelsLayerSettings</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-title function_">extend</span>({
+	<span class="hljs-attr">initialize</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Settings</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">initialize</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">SimpleLabel</span>(<span class="hljs-string">"id"</span>, <span class="hljs-string">"labelsLayer"</span>).<span class="hljs-title function_">setStyle</span>(<span class="hljs-string">"message"</span>), <span class="hljs-string">"labelsLayer"</span>);
+	}
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LabelsLayer</span> = L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Layer</span>.<span class="hljs-title function_">extend</span>({
+
+	<span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-comment">// Random backgrounds for labels</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_backgrounds</span> = [<span class="hljs-string">"#572626"</span>, <span class="hljs-string">"#866b41"</span>, <span class="hljs-string">"#265818"</span>, <span class="hljs-string">"#3b7f6f"</span>, <span class="hljs-string">"#346278"</span>, <span class="hljs-string">"#653584"</span>, <span class="hljs-string">"#79095d"</span>];
+
+		<span class="hljs-comment">// This will render the labels. The argument determines whether layer should automatically redraw labels.</span>
+		<span class="hljs-comment">// It's recommended to set it to false, if you'll add and remove labels repeatedly which we'll do.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_labelsLayer</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LeafletLayers</span>.<span class="hljs-title class_">LabelLayer</span>(<span class="hljs-literal">false</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addLayers</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_labelsLayer</span>);
+
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span> = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-property">Widgets</span>.<span class="hljs-title class_">ValueLabel</span>(<span class="hljs-string">"id"</span>, <span class="hljs-string">"drawnLabels"</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addWidget</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span>);
+
+		<span class="hljs-comment">// Add event listener to the map which will listen to moving and resizing</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">addEventListenerTo</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>, <span class="hljs-string">"moveend resize"</span>, <span class="hljs-string">"_generateLabels"</span>);
+		<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_generateLabels</span>(); <span class="hljs-comment">// Run it for the first time</span>
+	},
+
+	<span class="hljs-attr">_generateLabels</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_labelsLayer</span>.<span class="hljs-title function_">deleteAllLabels</span>();
+		<span class="hljs-keyword">let</span> bounds = <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">getBounds</span>();
+		<span class="hljs-keyword">let</span> toLat = bounds.<span class="hljs-title function_">getSouth</span>(), toLng = bounds.<span class="hljs-title function_">getEast</span>(), step = <span class="hljs-number">5</span> / <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">getZoom</span>(), count = <span class="hljs-number">0</span>;
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> lat = bounds.<span class="hljs-title function_">getNorth</span>(); lat &gt;= toLat; lat -= step) {
+			<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> lng = bounds.<span class="hljs-title function_">getWest</span>(); lng &lt;= toLng; lng += step) {
+				<span class="hljs-comment">// Add a label to the labels layer.</span>
+				<span class="hljs-comment">// First argument is an ID which we can skip, and layer will generate it for us.</span>
+				<span class="hljs-comment">// Second argument is label position.</span>
+				<span class="hljs-comment">// Third argument is label text.</span>
+				<span class="hljs-comment">// Fourth argument is display options.</span>
+				<span class="hljs-variable language_">this</span>.<span class="hljs-property">_labelsLayer</span>.<span class="hljs-title function_">addLabel</span>(<span class="hljs-string">""</span>, [lat, lng], lat.<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">3</span>) + <span class="hljs-string">"\n"</span> + lng.<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">3</span>),
+					{
+						<span class="hljs-attr">origin</span>: <span class="hljs-string">"center"</span>,
+						<span class="hljs-attr">textAlign</span>: <span class="hljs-string">"center"</span>,
+						<span class="hljs-attr">fontColor</span>: <span class="hljs-string">"white"</span>,
+						<span class="hljs-attr">backgroundColor</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">_backgrounds</span>[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-variable language_">this</span>.<span class="hljs-property">_backgrounds</span>.<span class="hljs-property">length</span>)],
+					});
+				count++;
+			}
+		}
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_labelsLayer</span>.<span class="hljs-title function_">redraw</span>(); <span class="hljs-comment">// Redraw the labels. You don't need to call it, if you're using automatic redraw.</span>
+		<span class="hljs-variable language_">this</span>.<span class="hljs-property">_label</span>.<span class="hljs-title function_">setValue</span>(count);
+	},
+
+	<span class="hljs-attr">statics</span>: {
+		<span class="hljs-attr">wizard</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LabelsLayerWizard</span>,
+		<span class="hljs-attr">settings</span>: <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">LabelsLayerSettings</span>(),
+	}
+
+});
+
+L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</span>.<span class="hljs-title function_">initializeSystem</span>();
+
+<span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">"map6"</span>, {
+	<span class="hljs-attr">preferCanvas</span>: <span class="hljs-literal">true</span>,
+	<span class="hljs-attr">keyboard</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">zoomControl</span>: <span class="hljs-literal">false</span>,
+}).<span class="hljs-title function_">setView</span>([<span class="hljs-number">51</span>, <span class="hljs-number">2</span>], <span class="hljs-number">7</span>);
+
+<span class="hljs-keyword">let</span> layerSystem = <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">System</span>(map, {
+	<span class="hljs-attr">enableProjects</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableExport</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableBaseLayerSwitching</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">enableSettings</span>: <span class="hljs-literal">false</span>,
+	<span class="hljs-attr">useOnlyThisLayer</span>: L.<span class="hljs-property">ALS</span>.<span class="hljs-property">LabelsLayer</span>,
+	<span class="hljs-attr">position</span>: <span class="hljs-string">"topright"</span>,
+}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
+
+<span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>, <span class="hljs-attr">minZoom</span>: <span class="hljs-number">1</span>});
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1 id="insert-before">ALS beyond ALS</h1>
+
+	<p>You can use ALS CSS classes such as <code>.als-dark</code> or <code>.ie-lte-9</code> to modify app look and
+		behavior.</p>
+
+	<p>You can also use widgets and widgetables anywhere in your page! Just put <code>container</code> property wherever
+		you want!</p>
+
+	<p>This site uses these techniques to use custom styles for dark theme, provide better desktop layout and create
+		spoilers with the code.</p>
+
+	<div class="als-widget-row als-divider"></div>
+
+	<footer>
+		<p>© <a href="https://github.com/matafokka" class="link">matafokka</a>, <span id="year">2021</span></p>
+
+		<p>See the source code of this website <a href="https://github.com/matafokka/als-demos" class="link">here</a></p>
+	</footer>
+</div>
+
+<script src="main.js"></script> <!-- Main script -->
+
+</body></html>

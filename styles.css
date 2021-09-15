@@ -1,0 +1,88 @@
+#content {
+	padding: 0.5rem;
+}
+
+.not-mobile #content {
+	max-width: 70rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.als-map-container {
+	width: 100%;
+	height: 20rem;
+	margin-bottom: 2rem;
+	border: 1px solid #ccc;
+}
+
+.als-dark .als-map-container {
+	border: 1px solid #696969;
+}
+
+h1 {
+	text-align: center;
+}
+
+.demo {
+	font-family: Consolas, consolas, monospace;
+	white-space: pre;
+}
+
+.demo > * {
+	display: inline-block;
+}
+
+.demo * {
+	tab-size: 4;
+}
+
+.line-numbers {
+	position: sticky;
+	left: 0;
+	background: #e7e7e7;
+	border-right: 1px solid #ccc;
+	text-align: center;
+	margin-right: 0.5rem;
+	padding-left: 0.3rem;
+	padding-right: 0.3rem;
+	user-select: none;
+}
+
+.als-dark .line-numbers {
+	background: rgb(31, 31, 31);
+	border-right: 1px solid #696969;
+}
+
+.spoiler-no-padding {
+	padding: 0;
+}
+
+.code-spoiler-wrapper {
+	overflow-x: auto !important;
+}
+
+.mobile .code {
+	font-size: 10pt;
+}
+
+.link {
+	color: cornflowerblue;
+	transition: color 0.2s;
+}
+
+.link:hover {
+	color: darkblue;
+	transition: color 0.2s;
+}
+
+.als-dark .link {
+	color: cornflowerblue;
+}
+
+.als-dark .link:hover {
+	color: #62c8f3;
+}
+
+footer {
+	text-align: center;
+}

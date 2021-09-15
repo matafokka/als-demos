@@ -1,0 +1,79 @@
+{
+  "name": "als-demos",
+  "version": "1.0.0",
+  "description": "ALS demos",
+  "main": "index.js",
+  "browser": "index.html",
+  "browserslist": [
+    "chrome >= 7",
+    "firefox >= 4",
+    "ie >= 8",
+    "last 2 versions"
+  ],
+  "babel": {
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "useBuiltIns": "usage",
+          "corejs": {
+            "version": 3,
+            "proposals": true
+          },
+          "targets": "chrome >= 7, firefox >= 4, ie >= 8, last 2 versions",
+          "forceAllTransforms": true,
+          "spec": true
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties"
+      ],
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "corejs": 3
+        }
+      ]
+    ]
+  },
+  "scripts": {
+    "build": "node build.js",
+    "postinstall": "npm link leaflet-advanced-layer-system",
+    "serve": "http-server \"./dist\" -c-1",
+    "build-and-serve": "node build.js && npm run serve"
+  },
+  "keywords": [
+    "leaflet-advanced-layer-system",
+    "als",
+    "als-demo",
+    "als-examples"
+  ],
+  "author": "",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/runtime-corejs3": "^7.12.5",
+    "babelify": "^10.0.0",
+    "browserify": "^16.1.1",
+    "buffer": "^4.9.2",
+    "common-shakeify": "^0.6.2",
+    "csso": "^4.2.0",
+    "fs-extra": "^9.0.1",
+    "highlight.js": "^11.2.0",
+    "jsdom": "^17.0.0",
+    "leaflet": "^1.7.1",
+    "leaflet-advanced-layer-system": "file:../leaflet-advanced-layer-system",
+    "persistify": "^2.0.1",
+    "postcss": "^8.3.6",
+    "postcss-prefix-selector": "^1.13.0",
+    "regenerator-runtime": "^0.13.7",
+    "uglifyify": "^5.0.2",
+    "watchify": "^3.11.0",
+    "webworkify": "^1.5.0"
+  }
+}

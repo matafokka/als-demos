@@ -1,3 +1,4 @@
+window.L = require("leaflet");
 require("./js/basicUsage.js");
 require("./js/basicUsageToolbar.js");
 require("./js/onlyMenu.js");

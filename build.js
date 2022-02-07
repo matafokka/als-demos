@@ -28,7 +28,6 @@ persistify({
 
 let toCopy = [
 	"leaflet-advanced-layer-system/dist/polyfills.js",
-	"leaflet/dist/leaflet.js",
 	"leaflet/dist/images",
 ];
 

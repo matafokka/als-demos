@@ -80,7 +80,7 @@ let mapId = 1;
 let content = document.getElementById("content");
 let insertBefore = document.getElementById("insert-before");
 for (let script of scripts) {
-	let code = document.createElement("code");
+	let code = document.createElement("div");
 	code.className = "demo";
 	code.id = "code-map" + mapId;
 

@@ -19,7 +19,7 @@
 		<p>Please, enable JavaScript to see the demos.</p>
 	</noscript>
 
-	<h1>Example from the ALS docs</h1><div id="map1" class="map"></div><code class="demo" id="code-map1"><div class="line-numbers">1
+	<h1>Example from the ALS docs</h1><div id="map1" class="map"></div><div class="demo" id="code-map1"><div class="line-numbers">1
 2
 3
 4
@@ -818,7 +818,7 @@ L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</spa
 layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);
 
 layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayer</span>); <span class="hljs-comment">// Register ALS layers</span>
-layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></code><h1>Same example but with toolbar enabled</h1><div id="map2" class="map"></div><code class="demo" id="code-map2"><div class="line-numbers">1
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></div><h1>Same example but with toolbar enabled</h1><div id="map2" class="map"></div><div class="demo" id="code-map2"><div class="line-numbers">1
 2
 3
 4
@@ -855,7 +855,7 @@ layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class
 <span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
 layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);
 layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">MyLayer</span>);
-layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></code><h1>Using ALS as a menu without some of the buttons</h1><div id="map3" class="map"></div><code class="demo" id="code-map3"><div class="line-numbers">1
+layerSystem.<span class="hljs-title function_">addLayerType</span>(L.<span class="hljs-property">ALS</span>.<span class="hljs-property">RectLayer</span>);</div></div><h1>Using ALS as a menu without some of the buttons</h1><div id="map3" class="map"></div><div class="demo" id="code-map3"><div class="line-numbers">1
 2
 3
 4
@@ -1050,7 +1050,7 @@ L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</spa
 <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
 
 <span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
-layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>); <span class="hljs-comment">// Add your base layers to the system</span></div></code><h1>Previous demo without any buttons. As simple as ALS could get.</h1><div id="map4" class="map"></div><code class="demo" id="code-map4"><div class="line-numbers">1
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>); <span class="hljs-comment">// Add your base layers to the system</span></div></div><h1>Previous demo without any buttons. As simple as ALS could get.</h1><div id="map4" class="map"></div><div class="demo" id="code-map4"><div class="line-numbers">1
 2
 3
 4
@@ -1091,7 +1091,7 @@ layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <s
 <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
 
 <span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
-layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1>Map widgets</h1><div id="map5" class="map"></div><code class="demo" id="code-map5"><div class="line-numbers">1
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></div><h1>Map widgets</h1><div id="map5" class="map"></div><div class="demo" id="code-map5"><div class="line-numbers">1
 2
 3
 4
@@ -1280,7 +1280,7 @@ L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</spa
 <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
 
 <span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>});
-layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1>Fast labels</h1><div id="map6" class="map"></div><code class="demo" id="code-map6"><div class="line-numbers">1
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></div><h1>Fast labels</h1><div id="map6" class="map"></div><div class="demo" id="code-map6"><div class="line-numbers">1
 2
 3
 4
@@ -1467,7 +1467,7 @@ L.<span class="hljs-property">ALS</span>.<span class="hljs-property">System</spa
 <span class="hljs-keyword">new</span> L.<span class="hljs-property">ALS</span>.<span class="hljs-title class_">ControlZoom</span>({<span class="hljs-attr">position</span>: <span class="hljs-string">"topleft"</span>}).<span class="hljs-title function_">addTo</span>(map);
 
 <span class="hljs-keyword">let</span> baseLayer = L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'</span>, {<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">19</span>, <span class="hljs-attr">minZoom</span>: <span class="hljs-number">1</span>});
-layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></code><h1 id="insert-before">ALS beyond ALS</h1>
+layerSystem.<span class="hljs-title function_">addBaseLayer</span>(baseLayer, <span class="hljs-string">"OSM"</span>);</div></div><h1 id="insert-before">ALS beyond ALS</h1>
 
 	<p>You can use ALS CSS classes such as <code>.als-dark</code> or <code>.ie-lte-9</code> to modify app look and
 		behavior.</p>
